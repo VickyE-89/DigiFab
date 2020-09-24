@@ -1744,6 +1744,10 @@ input, select, textarea {
 
 /* Image */
 
+	.first-prosjekt {
+		flex: center;
+	}
+	
 	.image {
 		display: inline-block;
 		border: 0;
