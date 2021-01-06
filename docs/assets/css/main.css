@@ -72,6 +72,21 @@ input, select, textarea {
 	appearance: none;
 }
 
+#border {
+	padding-left: 2vw;
+	padding-right: 1vw;
+}
+	
+.figCapStyle {
+	padding-right: 7vw;
+	margin-right: 7vw;
+}
+
+.space {
+	margin: 2vw;
+	margin-top: 3vw;
+}
+
 /* Basic */
 
 	html {
