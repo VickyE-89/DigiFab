@@ -31,7 +31,6 @@
 								<li><a href="index.html#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
 								<li><a href="index.html#portfolio" id="portfolio-link"><span class="icon solid fa-th">Mine prosjekter</span></a></li>
 								<li><a href="index.html#about" id="about-link"><span class="icon solid fa-user">Litt om meg</span></a></li>
-								<!--<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>-->
 							</ul>
 						</nav>
 
@@ -59,8 +58,8 @@
 
 							<header>
 								<h2 class="alt"> Sluttprosjekt - Reaksjonsspill </h2>
-								<p> Dette er mitt slutt prosjekt i faget. Pandemi og lockdown har gjort dette året og faget spesielt. 
-									Man gjør så godt man kan </p>
+								<p> Dette er mitt sluttprosjekt i faget. Pandemi og lockdown har gjort dette året og 
+								faget generelt anneledes enn det var tenkt. Men man gjør så godt man kan allikevel.</p>
 							</header>
 
 							<footer>
@@ -69,6 +68,281 @@
 
 						</div>
 					</section>
+					
+				<!-- Main content -->	
+					<article id="border">
+						<header>
+							<h2> Sluttprosjektet </h2>
+							<p> Som mitt slutt prosjekt ønsket jeg å lage et videreutviklet, fullverdig reaksjonsspill. 
+								Jeg fikk litt blod på tann ved forrige prosjekt, Raspberry Pi prosjektet mitt. 
+								Jeg ønsker å lage et full size spill, fire spiller, som skal stå på Makerspace. 
+								Tanken og ønsket er at fremmede mennesker skal kunne stoppe på Makerspace og ta et 
+								raskt spill sammen før man går videre til sitt. Smittevern er selvfølgelig også 
+								tatt med i betraktning. Tanken er egne knapper og stort nok brett til å kunne holde 
+								en meters avstand under hele spillet. Når man er ferdig vasker man enkelt knappene. 
+							</p> 
+							<p> Så, for dette prosjektet har jeg laget en prototype av dette. Det er et én spiller spill, 
+								men konseptet er det samme. Når et lys lyser skal man trykke på knappen med samme farge. 
+								La oss ta en titt på hva jeg har gjort. 
+							</p>
+						</header>
+						
+						<p> Jeg startet med å gjøre litt forskjellig testing. Jeg testet knapper og lys opp i mot hverandre
+							og koblet knappene i en resistor ladder. I sluttresultatet gikk jeg vekk fra dette og kablet hver 
+							knapp til hver sin pin. Dette fordi jeg ikke fikk koden helt til å fungere når jeg skulle bruke 
+							forskjellige verdier på samme pin. Med litt bedre tid, og for videreutvikling av dette igjen, 
+							kommer jeg til å gå tilbake til å koble hver spillers knapper til hver sin resistor ladder. 
+							Jeg anser det som det mest effektive å gjøre. For dette én spiller spillet endte jeg imidlertid 
+							opp med å gjøre det på denne måten: 
+						</p>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/oversiktKobling1.jpg" alt= "Oversiktsbilde av elektronikken">
+								<figcaption class="figCapStyle">
+									Oversiktsbilde av måten jeg valgte å koble prosjektet på. Klypene du ser på bilde er koblet 
+									til knappene. 
+								</figcaption>
+						</figure>
+						
+						<p> Før vi ser nærmere på byggeprosessen, ønsker jeg å vise koden for programmet. For referanse til 
+							koden får du her en pin oversikt. 
+						</p>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/pinOversikt1.jpg" alt= "Pin oversikt">
+								<figcaption class="figCapStyle">
+									Pin brukt.
+									<ul>
+										<li>Pin 2 - Gul knapp</li>
+										<li>Pin 18 - Blå knapp</li>
+										<li>Pin 19 - Rød knapp</li>
+										<li>Pin 20 - Grønn knapp</li>
+										<li>Pin 21 - Hvit knapp</li>
+										<li>Pin 3 - Gult lys</li>
+										<li>Pin 4 - Blått lys</li>
+										<li>Pin 5 - Rødt lys</li>
+										<li>Pin 6 - Grønt lys</li>
+										<li>Pin 7 - Hvitt lys</li>
+									</ul>
+								</figcaption>
+						</figure>
+						
+						<p> La oss ta en nærmere titt på koden. Jeg har gjort mye undersøkelser og finner ingen som har 
+							gjort det akkuratt slik som jeg har. De fleste reaksjonspillene jeg har funnet på nett 
+							innebærer at man skal være første mann til å trykke på de samme knappene, eller at man 
+							har én knapp man skal trykke på når et bestemt lys lyser. Jeg har imidlertid funnet inspirasjon 
+							fra en fyr på YouTube, Tutorial X, i tillegg til forelesnings videoer i faget. Link til 
+							YouTube videoen: 
+							<a href="https://www.youtube.com/watch?v=OsH4pnwTM5s&t"> Arduino Tutorial: 13. LED Reaction Game - part 2</a>.
+							Jeg har brukt "attachInterrupt" for å få knappene til å avbryte programmet, og koden min ser slik ut:  
+						</p>
+						
+						<p class="codeText">
+							//Definerer alle lampene til pin og setter som variabler for senere bruk <br/>
+							#define yellowLED 3 <br/>
+							#define blueLED 4 <br/>
+							#define redLED 5 <br/>
+							#define greenLED 6 <br/>
+							#define whiteLED 7 <br/><br/>
+
+							// Tilfeldig tider lysene kan lyse i <br/>
+							int timesOn[] = {400, 600, 800, 1000, 1200}; <br/><br/>
+
+							// Tilfeldig forsinkelse mellom lysene <br/>
+							int delayTimes[] = {500, 700, 900, 1100, 1300}; <br/><br/>
+
+							//Variabler for å sjekke om lysene er på eller ikke <br/>
+							volatile boolean yellowLight = false; <br/>
+							volatile boolean blueLight = false; <br/>
+							volatile boolean redLight = false; <br/>
+							volatile boolean greenLight = false; <br/>
+							volatile boolean whiteLight = false; <br/><br/>
+
+							// For å sjekke om man har vunnet. <br/>
+							volatile boolean isWinner = false; <br/><br/>
+
+
+							void setup() { <br/>
+							  pinMode(yellowLED, OUTPUT); //Gult lys <br/>
+							  pinMode(blueLED, OUTPUT); // Blått lys <br/>
+							  pinMode(redLED, OUTPUT); // Rødt lys <br/>
+							  pinMode(greenLED, OUTPUT); // Grønt lys <br/>
+							  pinMode(whiteLED, OUTPUT); // Hvitt lys <br/><br/>
+
+							  attachInterrupt(digitalPinToInterrupt(2), checkWinnerYellow, CHANGE); // Gul knapp <br/>
+							  attachInterrupt(digitalPinToInterrupt(18), checkWinnerBlue, CHANGE); // Blå knapp <br/>
+							  attachInterrupt(digitalPinToInterrupt(19), checkWinnerRed, CHANGE); // Rød knapp <br/>
+							  attachInterrupt(digitalPinToInterrupt(20), checkWinnerGreen, CHANGE); // Grønn knapp <br/>
+							  attachInterrupt(digitalPinToInterrupt(21), checkWinnerWhite, CHANGE); // Hvit knapp <br/>
+							  turnOffLEDs(); <br/>
+
+							} <br/><br/>
+
+							void loop() {<br/>
+							  int randomLED = random(1,6); //Velger et tilfeldig lys <br/>
+							  int timeLEDIsLit = timesOn[random(5)]; //Velger en tilfeldig tid lyset skal være tent fra listen(array) definert over <br/>
+							  lightLED(randomLED, timeLEDIsLit); //Skrur på det valgte lyset <br/>
+							  turnOffLEDs(); //Skrur av alle lys <br/>
+							  int delayTime = delayTimes[random(5)]; //pauser i tilfeldig valgt tid fra listen definert over <br/>
+							  if (isWinner) { //Sjekker om vinner variabelen er sann <br/>
+								isWinner = false; //Hvis det er en vinner, setter vinner variabelen tilbake til falsk <br/>
+								winner(); //og deretter utfører vinner sekvensen <br/>
+							  } <br/>
+							} <br/><br/>
+
+							//Metode for å skru på tilfeldig lys <br/>
+							//Bruker switch-case for å skille de forskjellige mulighetene <br/>
+							//Hvert tilfelle skrur på hvert sitt lys og setter tilhørende variabel til sann <br/>
+							void lightLED(int led, int duration) { <br/>
+							  switch (led) { <br/>
+								case 1: // Gul <br/>
+								  digitalWrite(yellowLED, HIGH); <br/>
+								  yellowLight = true; <br/>
+								  break; <br/>
+								 case 2: //Blå <br/>
+								  digitalWrite(blueLED, HIGH); <br/>
+								  blueLight = true; <br/>
+								  break; <br/>
+								 case 3: // Rød <br/>
+								  digitalWrite(redLED, HIGH); <br/>
+								  redLight = true; <br/>
+								  break; <br/>
+								 case 4: // Grønn <br/>
+								  digitalWrite(greenLED, HIGH); <br/>
+								  greenLight = true; <br/>
+								  break; <br/>
+								 case 5: // Hvit <br/>
+								  digitalWrite(whiteLED, HIGH); <br/>
+								  whiteLight = true; <br/>
+								  break; <br/>
+								 default: <br/>
+								  break; <br/>
+								 } <br/>
+								 //vent forsinkelses tiden <br/>
+								 delay(duration); <br/>
+								 // Nullstiller alle variabler for påskrudd lys <br/>
+								 yellowLight = false; <br/>
+								 blueLight = false; <br/>
+								 redLight = false; <br/>
+								 greenLight = false; <br/>
+								 whiteLight = false; <br/>
+								} <br/><br/>
+
+							//Metode for å skru alle lys av <br/>
+							void turnOffLEDs() { <br/>
+							  digitalWrite(yellowLED, LOW); <br/>
+							  digitalWrite(blueLED, LOW); <br/>
+							  digitalWrite(redLED, LOW); <br/>
+							  digitalWrite(greenLED, LOW); <br/>
+							  digitalWrite(whiteLED, LOW); <br/>
+							  } <br/><br/>
+
+							//Metode for å indikere et vinn <br/>
+							void winner() { <br/>
+							  // Alle lys blinker 3 ganger hver gang man trykker på riktig knapp til riktig tid <br/>
+							  for (int i=0; i&lt;3; i++) { <br/>
+								digitalWrite(3, HIGH); <br/>
+								digitalWrite(4, HIGH); <br/>
+								digitalWrite(5, HIGH); <br/>
+								digitalWrite(6, HIGH); <br/>
+								digitalWrite(7, HIGH); <br/>
+								delay(250); <br/>
+								digitalWrite(3, LOW); <br/>
+								digitalWrite(4, LOW); <br/>
+								digitalWrite(5, LOW); <br/>
+								digitalWrite(6, LOW); <br/>
+								digitalWrite(7, LOW); <br/>
+								delay(250); <br/>
+							  } <br/>
+							  delay(2000); <br/>
+							} <br/><br/>
+
+							//Metode kalt når gul knapp trykkes <br/>
+							void checkWinnerYellow() { <br/>
+							  if(yellowLight) { //Hvis variabel for gult lys er sann <br/>
+								isWinner = true; // Sett variabel for vinner til sann <br/>
+							  } <br/>
+							} <br/><br/>
+
+							//Metode kalt når blå knapp trykkes <br/>
+							void checkWinnerBlue() { <br/>
+							  if(blueLight) { //Hvis variabel for blått lys er sann <br/>
+								isWinner = true; //Sett variabel for vinner til sann <br/>
+							  } <br/>
+							} <br/><br/>
+
+							//Metode kalt når rød knapp trykkes <br/>
+							void checkWinnerRed() { <br/>
+							  if(redLight) { //Hvis variabel for rødt lys er sann <br/>
+								isWinner = true; //Sett variabel for vinner til sann <br/>
+							  } <br/>
+							} <br/><br/>
+
+							//Metode kalt når grønn knapp trykkes <br/>
+							void checkWinnerGreen() { <br/>
+							  if(greenLight) { //Hvis variabel for grønt lys er sann <br/>
+								isWinner = true; //Sett variabel for vinner til sann <br/>
+							   } <br/>
+							} <br/><br/>
+
+							//Metode kalt når hvit knapp trykkes <br/>
+							void checkWinnerWhite() { <br/>
+							  if(whiteLight) { //Hvis variabel for hvitt lys er sann <br/>
+								isWinner = true; //Sett variabel for vinner til sann <br/>
+							  } <br/>
+							} <br/>
+						</p>
+						
+						<a href="reactGame_Prototype.ino">Du kan også se koden her</a>
+						
+						<p></br>Et par videoer av tidlig testing. Her skrur jeg på og av lysene med knappene. </p>
+						
+						<div class="space">
+							<iframe width="560" height="315" src="https://youtube.com/embed/lVXlvbioNz0" frameborder="0" allow="accelerometer; autoplay; 
+							clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+							<iframe width="560" height="315" src="https://youtube.com/embed/zqN7bynLWrU" frameborder="0" allow="accelerometer; autoplay; 
+							clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						</div>
+						
+						<p> Da kan vi se på selve byggingen av den ferdige prototypen. 
+						</p>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/bygging1.jpg" alt= "Byggeprosessen">
+							<img width="400px" src= "images/sluttprosjekt/bygging2.jpg" alt= "Byggeprosessen">
+								<figcaption class="figCapStyle">
+									Byggeprosessen er i gang.  
+								</figcaption>
+						</figure>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/bygging3.jpg" alt= "Byggeprosessen">
+							<img width="400px" src= "images/sluttprosjekt/bygging5.jpg" alt= "Byggeprosessen">
+								<figcaption class="figCapStyle">
+									Byggeprosessen er i gang.  
+								</figcaption>
+						</figure>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/bygging6.jpg" alt= "Byggeprosessen">
+							<img width="400px" src= "images/sluttprosjekt/bygging7.jpg" alt= "Byggeprosessen">
+								<figcaption class="figCapStyle">
+									Byggeprosessen er i gang.  
+								</figcaption>
+						</figure>
+						
+						<figure class="space">
+							<img width="400px" src= "images/sluttprosjekt/bygging4.jpg" alt= "Byggeprosessen">
+								<figcaption class="figCapStyle">
+									Byggeprosessen er i gang.  
+								</figcaption>
+						</figure>
+						
+						
+						<p> 
+						</p>
+						
+					</article>
 
 				<!-- Portfolio -->
 					<section id="portfolio" class="two">

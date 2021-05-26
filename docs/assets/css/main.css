@@ -224,6 +224,11 @@ input, select, textarea {
 	br.clear {
 		clear: both;
 	}
+	
+	.codeText {
+		color: #000000;
+		font-weight: 400;
+	}
 
 /* Container */
 
